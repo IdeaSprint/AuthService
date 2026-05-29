@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @OpenAPIDefinition(
         info = @Info(title = "Auth Service API", version = "v1"),
+        servers = @io.swagger.v3.oas.annotations.servers.Server(url = "/api", description = "API Gateway"),
         security = @SecurityRequirement(name = "bearerAuth")
 )
 @SecurityScheme(

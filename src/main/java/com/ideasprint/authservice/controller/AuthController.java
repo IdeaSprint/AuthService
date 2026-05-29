@@ -41,5 +41,6 @@ public class AuthController {
     public ResponseEntity<UserResponse> getUserByUsername(@PathVariable String username) {
         return ResponseEntity.ok(authService.getUserByUsername(username));
     }
+
 }
 

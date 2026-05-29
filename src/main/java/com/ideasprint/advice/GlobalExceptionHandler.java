@@ -1,4 +1,5 @@
 package com.ideasprint.advice;
+
 import com.ideasprint.dto.ErrorResponse;
 import com.ideasprint.exception.BusinessException;
 import com.ideasprint.exception.ResourceNotFoundException;
@@ -10,7 +11,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,16 +44,15 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
-    public ResponseEntity<ErrorResponse> handleDataIntegrity(org.springframework.dao.DataIntegrityViolationException ex) {
+    public ResponseEntity<ErrorResponse> handleDataIntegrity(
+            org.springframework.dao.DataIntegrityViolationException ex) {
         log.warn(env.getProperty("log.data.integrity"), ex.getMessage());
         return buildResponse(HttpStatus.CONFLICT, env.getProperty("error.database.constraint"));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex) {
-        var message = ex.getBindingResult().getFieldErrors().stream()
-                .map(FieldError::getDefaultMessage)
-                .collect(Collectors.joining(", "));
+        var message = ex.getBindingResult().getFieldErrors().stream().map(FieldError::getDefaultMessage).collect(Collectors.joining(", "));
         log.warn(env.getProperty("log.validation.failed"), message);
         return buildResponse(HttpStatus.BAD_REQUEST, message);
     }
@@ -69,7 +68,3 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(error);
     }
 }
-
-
-
-
